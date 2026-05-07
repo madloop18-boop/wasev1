@@ -1,6 +1,5 @@
 {
   "rewrites": [
-    { "source": "/formulario-leads.html", "destination": "/formulario-leads.html" },
-    { "source": "/((?!formulario-leads.html).*)", "destination": "/index.html" }
+    { "source": "/((?!formulario-leads\\.html).*)", "destination": "/index.html" }
   ]
 }
