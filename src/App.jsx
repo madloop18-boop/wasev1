@@ -45,7 +45,11 @@ export default function App() {
         {!splashDone && <Splash onDone={() => setSplashDone(true)} />}
       </AnimatePresence>
 
-      {splashDone && !user && <Login />}
+      {splashDone && !user && (
+        <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', zIndex: 50 }}>
+          <Login />
+        </div>
+      )}
 
       {splashDone && user && (
         <div className="noise flex h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>
