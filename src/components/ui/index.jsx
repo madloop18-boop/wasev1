@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 export function Card({ children, className = '', hover = true, style = {} }) {
   return (
     <motion.div whileHover={hover ? { y: -2 } : {}} transition={{ duration: 0.15 }}
-      className={`rounded-xl overflow-hidden ${className}`}
+      className={`rounded-2xl overflow-hidden ${className}`}
       style={{ background: 'var(--surface)', border: '1px solid var(--border)', ...style }}>
       {children}
     </motion.div>
@@ -38,18 +38,18 @@ export function KPICard({ label, value, delta, deltaUp, icon: Icon, prefix = '',
   }
 
   return (
-    <motion.div whileHover={{ y:-2, borderColor:'rgba(200,240,0,0.5)' }} transition={{ duration:0.15 }}
-      className="relative overflow-hidden rounded-xl p-5 scan"
+    <motion.div whileHover={{ y:-2, borderColor:'rgba(200,240,0,0.6)' }} transition={{ duration:0.15 }}
+      className="relative overflow-hidden rounded-2xl p-5 scan"
       style={{ background:'var(--surface)', border:'1px solid var(--border)' }}>
       <div className="absolute top-0 left-0 right-0 h-[2px]"
-           style={{ background:'linear-gradient(90deg,transparent,rgba(200,240,0,0.6),transparent)' }} />
+           style={{ background:'linear-gradient(90deg,transparent,rgba(200,240,0,0.7),transparent)' }} />
       <div className="flex items-start justify-between mb-3">
         <span className="text-[11px] uppercase tracking-[0.12em] font-bold" style={{ color:'var(--text2)' }}>{label}</span>
-        {Icon && <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background:'var(--accent-dim)' }}>
-          <Icon size={15} style={{ color:'var(--accent)' }} />
+        {Icon && <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background:'var(--accent-dim)', border:'1px solid rgba(200,240,0,0.2)' }}>
+          <Icon size={16} style={{ color:'var(--accent)' }} />
         </div>}
       </div>
-      <div className="font-black text-[30px] leading-none mb-2 count-up" style={{ fontFamily:'Syne,sans-serif', color:'var(--text1)' }}>
+      <div className="font-black text-[32px] leading-none mb-2 count-up" style={{ fontFamily:'Syne,sans-serif', color:'var(--text1)' }}>
         {loading ? <div className="shimmer h-9 w-28" /> : <>{prefix}{fmt(displayed)}{suffix}</>}
       </div>
       {delta && (
@@ -75,25 +75,56 @@ export function SH({ title, children }) {
 // ── BUTTON ────────────────────────────────────────────────
 export function Btn({ children, variant='primary', onClick, className='', size='md', icon:Icon, disabled=false }) {
   const sizes = {
-    sm: 'text-[12.5px] px-4 py-2',
-    md: 'text-[13.5px] px-5 py-2.5',
-    lg: 'text-[15px] px-6 py-3',
+    sm: { cls: 'text-[12px] px-4 py-2 gap-1.5', iconSz: 13 },
+    md: { cls: 'text-[13.5px] px-5 py-2.5 gap-2', iconSz: 15 },
+    lg: { cls: 'text-[15px] px-7 py-3.5 gap-2.5', iconSz: 17 },
   }
-  const vars = {
-    primary: { background:'var(--accent)', color:'#0a0a0a', border:'none', fontWeight:700 },
-    ghost:   { background:'var(--raised)', color:'var(--text1)', border:'1px solid var(--border)', fontWeight:600 },
-    danger:  { background:'rgba(255,77,77,0.15)', color:'var(--danger)', border:'1px solid rgba(255,77,77,0.4)', fontWeight:600 },
-  }
+  const { cls, iconSz } = sizes[size] || sizes.md
+
+  const base = `inline-flex items-center justify-center font-bold rounded-xl transition-all ${cls} ${className}`
+
+  if (variant === 'primary') return (
+    <motion.button
+      whileHover={{ scale: 1.04, boxShadow: '0 0 28px rgba(200,240,0,0.5), 0 4px 16px rgba(0,0,0,0.4)' }}
+      whileTap={{ scale: 0.97 }}
+      onClick={onClick} disabled={disabled}
+      className={base}
+      style={{ background:'var(--accent)', color:'#0a0a0a', border:'none', letterSpacing:'0.05em', textTransform:'uppercase', fontFamily:'Syne,sans-serif', opacity:disabled?0.5:1, cursor:disabled?'not-allowed':'pointer' }}>
+      {Icon && <Icon size={iconSz} strokeWidth={2.5} />}{children}
+    </motion.button>
+  )
+
+  if (variant === 'ghost') return (
+    <motion.button
+      whileHover={{ scale: 1.03, borderColor:'rgba(200,240,0,0.5)', color:'var(--accent)' }}
+      whileTap={{ scale: 0.97 }}
+      onClick={onClick} disabled={disabled}
+      className={base}
+      style={{ background:'var(--raised)', color:'var(--text1)', border:'1px solid var(--border)', opacity:disabled?0.5:1, cursor:disabled?'not-allowed':'pointer', transition:'color 0.15s, border-color 0.15s' }}>
+      {Icon && <Icon size={iconSz} strokeWidth={2} />}{children}
+    </motion.button>
+  )
+
+  if (variant === 'danger') return (
+    <motion.button
+      whileHover={{ scale: 1.03, boxShadow:'0 0 18px rgba(255,77,77,0.3)' }}
+      whileTap={{ scale: 0.97 }}
+      onClick={onClick} disabled={disabled}
+      className={base}
+      style={{ background:'rgba(255,77,77,0.12)', color:'var(--danger)', border:'1px solid rgba(255,77,77,0.4)', opacity:disabled?0.5:1, cursor:disabled?'not-allowed':'pointer' }}>
+      {Icon && <Icon size={iconSz} strokeWidth={2} />}{children}
+    </motion.button>
+  )
+
+  // outline
   return (
     <motion.button
-      whileHover={{ scale: 1.03, opacity: 0.92 }}
+      whileHover={{ scale: 1.03, background:'var(--accent-dim)' }}
       whileTap={{ scale: 0.97 }}
-      onClick={onClick}
-      disabled={disabled}
-      className={`inline-flex items-center gap-2 rounded-xl transition-all ${sizes[size]} ${className}`}
-      style={{ ...vars[variant], opacity: disabled ? 0.5 : 1, cursor: disabled ? 'not-allowed' : 'pointer' }}>
-      {Icon && <Icon size={15} strokeWidth={2.5} />}
-      {children}
+      onClick={onClick} disabled={disabled}
+      className={base}
+      style={{ background:'transparent', color:'var(--accent)', border:'2px solid var(--accent)', opacity:disabled?0.5:1, cursor:disabled?'not-allowed':'pointer' }}>
+      {Icon && <Icon size={iconSz} strokeWidth={2} />}{children}
     </motion.button>
   )
 }
@@ -101,7 +132,7 @@ export function Btn({ children, variant='primary', onClick, className='', size='
 // ── TABLE ─────────────────────────────────────────────────
 export function Table({ headers, children, className='' }) {
   return (
-    <div className={`rounded-xl overflow-hidden ${className}`} style={{ border:'1px solid var(--border)' }}>
+    <div className={`rounded-2xl overflow-hidden ${className}`} style={{ border:'1px solid var(--border)' }}>
       <table className="w-full border-collapse">
         <thead>
           <tr style={{ background:'var(--raised)' }}>
@@ -155,7 +186,6 @@ const SVC_COLORS = {
   'Pack Completo':   { bg:'rgba(245,158,11,0.15)',  color:'var(--warn)' },
 }
 export function SvcBadge({ service }) {
-  // Puede venir como string separado por coma
   const services = String(service || '').split(',').map(s => s.trim()).filter(Boolean)
   return (
     <div className="flex flex-wrap gap-1">
