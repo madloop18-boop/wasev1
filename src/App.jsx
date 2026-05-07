@@ -5,8 +5,8 @@ import Sidebar from './components/layout/Sidebar'
 import Topbar  from './components/layout/Topbar'
 import { Toast, Modal } from './components/layout/Topbar'
 
-import Splash  from './components/ui/Splash'
-import Login   from './pages/Login'
+import Login             from './pages/Login'
+import FormularioPublico from './pages/FormularioPublico'
 
 import Dashboard  from './pages/Dashboard'
 import Analytics  from './pages/Analytics'
@@ -29,7 +29,7 @@ const PAGES = {
 }
 
 export default function App() {
-  const { activePage, fetchAll } = useStore()
+   const { activePage, fetchAll } = useStore()
   const { user } = useAuth()
   const [splashDone, setSplashDone] = useState(true)
 
@@ -39,12 +39,10 @@ export default function App() {
 
   const Page = PAGES[activePage] || Dashboard
 
+  // Ruta pública — no requiere login
+  if (window.location.pathname === '/contacto') return <FormularioPublico />
   return (
     <>
-      <AnimatePresence>
-        {!splashDone && <Splash onDone={() => setSplashDone(true)} />}
-      </AnimatePresence>
-
       {splashDone && !user && (
         <div style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', zIndex: 50 }}>
           <Login />
@@ -53,7 +51,6 @@ export default function App() {
 
       {splashDone && user && (
         <div className="noise flex h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>
-          {/* Ambient glows */}
           <div className="pointer-events-none fixed top-0 left-0 w-[500px] h-[500px] rounded-full"
                style={{ background: 'radial-gradient(circle, rgba(200,240,0,0.05) 0%, transparent 70%)', transform: 'translate(-40%,-40%)' }} />
           <div className="pointer-events-none fixed bottom-0 right-0 w-[400px] h-[400px] rounded-full"
