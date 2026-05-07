@@ -31,7 +31,7 @@ const PAGES = {
 export default function App() {
   const { activePage, fetchAll } = useStore()
   const { user } = useAuth()
-  const [splashDone, setSplashDone] = useState(false)
+  const [splashDone, setSplashDone] = useState(true)
 
   useEffect(() => {
     if (user) fetchAll()

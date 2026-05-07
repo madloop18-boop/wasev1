@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contacto — Wase Digital</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0a0a0a;font-family:'Helvetica Neue',Arial,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .card{background:#141414;border:1px solid #2a2a2a;border-radius:20px;padding:40px;width:100%;max-width:480px}
+  img.logo{height:36px;margin-bottom:24px;display:block}
+  h1{color:#f5f5f5;font-size:22px;font-weight:900;margin-bottom:4px}
+  p.sub{color:#666;font-size:13px;margin-bottom:28px}
+  label{display:block;color:#888;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px}
+  input,select,textarea{width:100%;background:#1e1e1e;border:1px solid #333;color:#f5f5f5;font-size:14px;padding:12px 14px;border-radius:12px;outline:none;font-family:inherit;transition:border-color .15s,box-shadow .15s;margin-bottom:16px}
+  input:focus,select:focus,textarea:focus{border-color:#c8f000;box-shadow:0 0 0 3px rgba(200,240,0,.1)}
+  select option{background:#1e1e1e}
+  textarea{resize:vertical;min-height:90px}
+  button{width:100%;background:#c8f000;color:#0a0a0a;border:none;padding:14px;border-radius:12px;font-size:14px;font-weight:900;cursor:pointer;letter-spacing:.08em;text-transform:uppercase;transition:box-shadow .2s,transform .1s;margin-top:4px}
+  button:hover{box-shadow:0 0 28px rgba(200,240,0,.45)}
+  button:active{transform:scale(.98)}
+  button:disabled{opacity:.6;cursor:not-allowed}
+  .msg{display:none;margin-top:16px;padding:12px 16px;border-radius:10px;font-size:13px;text-align:center}
+  .msg.ok{background:rgba(200,240,0,.12);border:1px solid rgba(200,240,0,.3);color:#c8f000}
+  .msg.err{background:rgba(255,77,77,.1);border:1px solid rgba(255,77,77,.3);color:#ff4d4d}
+</style>
+</head>
+<body>
+<div class="card">
+  <img class="logo" src="https://wasedigital.com/wp-content/uploads/2025/05/cropped-Diseno-sin-titulo-18-106x57.png" alt="Wase Digital">
+  <h1>Hablemos de tu marca</h1>
+  <p class="sub">Completá el formulario y te contactamos en menos de 24hs.</p>
+
+  <form id="form">
+    <label>Nombre completo</label>
+    <input type="text" name="nombre" placeholder="Tu nombre" required>
+
+    <label>Email</label>
+    <input type="email" name="email" placeholder="tu@email.com" required>
+
+    <label>Teléfono (opcional)</label>
+    <input type="tel" name="telefono" placeholder="+54 9 11 0000-0000">
+
+    <label>¿Qué servicio te interesa?</label>
+    <select name="servicio" required>
+      <option value="">— Elegí una opción —</option>
+      <option>Meta ADS</option>
+      <option>Social Media</option>
+      <option>Content Creation</option>
+      <option>Pack Completo</option>
+    </select>
+
+    <label>¿Contanos más sobre tu negocio?</label>
+    <textarea name="mensaje" placeholder="Descripción breve de tu marca o proyecto..."></textarea>
+
+    <button type="submit" id="btn">Enviar consulta</button>
+  </form>
+
+  <div class="msg" id="msg"></div>
+</div>
+
+<script>
+// ← REEMPLAZÁ esta URL con la que te da GAS al deployar como Web App
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbygpwcS9rqF5-zfY3Iq1kVcEJazwul26ro5pu0LjkI0P8TFW-81HR-HD1vx_Nq2-tM1/exec'
+
+document.getElementById('form').addEventListener('submit', async (e) => {
+  e.preventDefault()
+  const btn = document.getElementById('btn')
+  const msg = document.getElementById('msg')
+  btn.disabled = true
+  btn.textContent = 'Enviando...'
+
+  const data = Object.fromEntries(new FormData(e.target))
+  data.fuente = 'formulario-web'
+
+  try {
+    await fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' },
+      mode: 'no-cors'
+    })
+    msg.className = 'msg ok'
+    msg.textContent = '¡Gracias! Te contactamos en menos de 24hs.'
+    msg.style.display = 'block'
+    e.target.reset()
+  } catch {
+    msg.className = 'msg err'
+    msg.textContent = 'Error al enviar. Intentá de nuevo.'
+    msg.style.display = 'block'
+  } finally {
+    btn.disabled = false
+    btn.textContent = 'Enviar consulta'
+  }
+})
+</script>
+</body>
+</html>
