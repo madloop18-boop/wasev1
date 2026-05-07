@@ -40,28 +40,10 @@ export default function Sidebar() {
            style={{ background: 'linear-gradient(to bottom, transparent, rgba(200,240,0,0.25) 50%, transparent)' }} />
 
       {/* ── LOGO ── */}
-      <div className="flex items-center gap-3 px-4 py-[18px] border-b" style={{ borderColor: 'var(--border)' }}>
-        <motion.div
-          whileHover={{ scale: 1.06 }}
-          className="flex-shrink-0 overflow-hidden rounded-lg"
-          style={{ width: 36, height: 36, background: 'var(--raised)' }}>
-          <img
-            src="https://wasedigital.com/wp-content/uploads/2025/05/cropped-Diseno-sin-titulo-18-106x57.png"
-            alt="Wase Digital"
-            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-          />
+      <div className="flex items-center justify-center px-3 py-4 border-b" style={{ borderColor: 'var(--border)', minHeight: 64 }}>
+        <motion.div whileHover={{ scale: 1.05 }} style={{ width: sidebarOpen ? 110 : 36, height: 36, transition: 'width 0.28s ease', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <img src="https://wasedigital.com/wp-content/uploads/2025/05/cropped-Diseno-sin-titulo-18-106x57.png" alt="Wase Digital" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
         </motion.div>
-        <AnimText show={sidebarOpen}>
-          <div>
-            <div className="font-black text-[15px] tracking-tight leading-none"
-                 style={{ fontFamily: 'Syne, sans-serif' }}>
-              WASE<span style={{ color: 'var(--accent)' }}>.</span>
-            </div>
-            <div className="text-[9px] uppercase tracking-[0.18em] mt-0.5" style={{ color: 'var(--text3)' }}>
-              Marketing Digital
-            </div>
-          </div>
-        </AnimText>
       </div>
 
       {/* ── NAV ── */}
